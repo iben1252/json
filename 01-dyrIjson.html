@@ -1,36 +1,59 @@
 <!DOCTYPE html>
-<html lang="">
+<html>
 
 <head>
-    <meta charset="UTF-8">
+    <title>Visalle</title>
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="">
-    <title>Objekter</title>
+    <style>
+        .dyr {
+            border: 1px solid black;
+            margin: 5px;
+            padding: 5px;
+        }
+
+        #liste {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            border: 1px solid silver;
+        }
+    </style>
 </head>
 
 <body>
-    <div id="empty"></div>
+    <div id="liste"></div>
 
     <script>
+
+        let alleDyr = [];
+
+
         document.addEventListener("DOMContentLoaded", start);
 
-        let dyrBox = document.querySelector("#empty");
-
         function start() {
-            dyr.forEach(etDyr => {
-                dyrBox.innerHTML +=
-                    `<div class="dyribox">
-                    <h3>${etDyr.navn}</h3> <img src="${etDyr.billede}" alt="etDyr.navn"> <p>${etDyr.type}</p> <p>${etDyr.levested}</p><br>
-                </div>`;
-            })
-            let dyrIBox = document.querySelectorAll(".dyribox");
-            dyrIBox.forEach(enBox =>
-                enBox.style.border = "1px solid black"
-            )
+            let dest = document.querySelector("#liste");
+
+            async function getJson() {
+                let jsonData = await fetch("dyr.json");
+                alleDyr = await jsonData.json();
+                visDyr();
+            }
+
+            function visDyr() {
+                alleDyr.forEach((dyr) => {
+                    dest.innerHTML += `
+                        <div class="dyr">
+                            <h2>${dyr.navn}</h2>
+                            <img src="${dyr.billede}" alt="${dyr.navn}">
+                            <p>Type: ${dyr.type}</p>
+                            <p>Levested: ${dyr.levested}</p>
+                        </div>`;
+                })
+            }
+
+            getJson();
         }
-
     </script>
-
 </body>
 
 </html>
